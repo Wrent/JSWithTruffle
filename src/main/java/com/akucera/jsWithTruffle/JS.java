@@ -1,5 +1,6 @@
 package com.akucera.jsWithTruffle;
 
+import com.akucera.jsWithTruffle.exceptions.UnknownSyntaxException;
 import jdk.nashorn.internal.ir.Statement;
 
 import java.io.IOException;
@@ -13,7 +14,11 @@ import java.util.List;
 public class JS extends JSImpl {
     @Override
     public void prepare(List<Statement> statements, InputStream in, OutputStream out) {
-
+        try {
+            StatementsHandler.handle(statements);
+        } catch (UnknownSyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

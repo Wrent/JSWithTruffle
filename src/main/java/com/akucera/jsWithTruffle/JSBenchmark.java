@@ -16,11 +16,7 @@ import java.util.List;
 public class JSBenchmark {
 
     public static void benchmark(JSImpl[] impls) throws IOException {
-        benchmark("loop0.bf", impls, "");
-        benchmark("long0.bf", impls, "");
-        benchmark("long1.bf", impls, "");
-        benchmark("towers_noprint.bf", impls, "");
-        benchmark("bf.bf", impls, ">+>+>+>+>++<[>[<+++>->>>>> +++++[->+++++++<]>[-]< <<<<<]<<]>.!");
+        benchmark("simple.js", impls, "");
     }
 
     private static final void benchmark(String name, JSImpl[] implementations, String input) throws IOException {
@@ -84,10 +80,7 @@ public class JSBenchmark {
     }
 
     private static List<Statement> parse(String file) throws IOException {
-        //todo
-        return null;
-
-        //return new BFParser().parse(com.oracle.truffle.bf.JSBenchmark.class.getResourceAsStream("/test/" + file));
+        return JSWithTruffleMain.parseToStatements(file);
     }
 
 }

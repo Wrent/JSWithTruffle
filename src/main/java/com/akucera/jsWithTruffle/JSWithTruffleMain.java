@@ -26,28 +26,25 @@ public class JSWithTruffleMain {
         }
 
         int impl = 0;
-        if (args.length > 1) {
-            impl = Integer.parseInt(args[1]);
-        }
 
         int iterations = 1;
-        if (args.length > 2) {
-            iterations = Integer.parseInt(args[2]);
+        if (args.length > 1) {
+            iterations = Integer.parseInt(args[1]);
         }
-        JSImpl bf = impls[impl];
+        JSImpl js = impls[impl];
 
-        System.out.println("Running with " + bf.getClass().getSimpleName() + " for " + iterations+ " iterations.");
+        System.out.println("Running with " + js.getClass().getSimpleName() + " for " + iterations+ " iterations.");
 
-        bf.prepare(parseToStatements(args[0]), System.in, System.out);
+        js.prepare(parseToStatements(args[0]), System.in, System.out);
         long time = System.currentTimeMillis();
         for (int i = 0; i < iterations; i++) {
-            bf.run();
+            js.run();
         }
 
         System.out.println("Elapsed " + ( System.currentTimeMillis() - time) + "ms");
     }
 
-    private static List<Statement> parseToStatements(String file) throws IOException {
+    public static List<Statement> parseToStatements(String file) throws IOException {
         Options options = new Options("nashorn");
         options.set("anon.functions", true);
         options.set("parse.only", true);
@@ -64,7 +61,6 @@ public class JSWithTruffleMain {
         FunctionNode functionNode = parser.parse();
         Block block = functionNode.getBody();
         List<Statement> statements = block.getStatements();
-        System.out.println(statements);
 
         return statements;
     }
