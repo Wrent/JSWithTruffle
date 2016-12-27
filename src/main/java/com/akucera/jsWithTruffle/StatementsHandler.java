@@ -72,40 +72,15 @@ public class StatementsHandler {
         //podle toho jaky typ ma promenna vytvorime JSnodes
         switch (assignmentSource.getType().toString()) {
             case "int":
-                LiteralNumberNode literalNumberNode = new LiteralNumberNode(new JSNumber(new Number() {
-                    @Override
-                    public int intValue() {
-                        return Integer.parseInt(assignmentSource.toString());
-                    }
-
-                    @Override
-                    public long longValue() {
-                        return Integer.parseInt(assignmentSource.toString());
-                    }
-
-                    @Override
-                    public float floatValue() {
-                        return Integer.parseInt(assignmentSource.toString());
-                    }
-
-                    @Override
-                    public double doubleValue() {
-                        return Integer.parseInt(assignmentSource.toString());
-                    }
-
-                    @Override
-                    public String toString() {
-                        return "" + this.intValue();
-                    }
-                }));
+                LiteralNumberNode literalNumberNode = getLiteralNumberNode(assignmentSource);
                 JSVarNode numberVar = JSVarNodeGen.create(literalNumberNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
                 return numberVar;
             case "boolean":
-                LiteralBooleanNode literalBooleanNode = new LiteralBooleanNode(new JSBoolean(Boolean.parseBoolean(assignmentSource.toString())));
+                LiteralBooleanNode literalBooleanNode = getLiteralBooleanNode(assignmentSource);
                 JSVarNode booleanVar = JSVarNodeGen.create(literalBooleanNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
                 return booleanVar;
             case "object<type=String>":
-                LiteralStringNode literalStringNode = new LiteralStringNode(new JSString(assignmentSource.toString()));
+                LiteralStringNode literalStringNode = getLiteralStringNode(assignmentSource);
                 JSVarNode stringVar = JSVarNodeGen.create(literalStringNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
                 return stringVar;
             case "object":
@@ -119,6 +94,43 @@ public class StatementsHandler {
             default:
                 throw new UnknownSyntaxException();
         }
+    }
+
+    private static LiteralStringNode getLiteralStringNode(Expression assignmentSource) {
+        return new LiteralStringNode(new JSString(assignmentSource.toString()));
+    }
+
+    private static LiteralBooleanNode getLiteralBooleanNode(Expression assignmentSource) {
+        return new LiteralBooleanNode(new JSBoolean(Boolean.parseBoolean(assignmentSource.toString())));
+    }
+
+    private static LiteralNumberNode getLiteralNumberNode(final Expression assignmentSource) {
+        return new LiteralNumberNode(new JSNumber(new Number() {
+            @Override
+            public int intValue() {
+                return Integer.parseInt(assignmentSource.toString());
+            }
+
+            @Override
+            public long longValue() {
+                return Integer.parseInt(assignmentSource.toString());
+            }
+
+            @Override
+            public float floatValue() {
+                return Integer.parseInt(assignmentSource.toString());
+            }
+
+            @Override
+            public double doubleValue() {
+                return Integer.parseInt(assignmentSource.toString());
+            }
+
+            @Override
+            public String toString() {
+                return "" + this.intValue();
+            }
+        }));
     }
 
     private static JSNode handleExpressionStatement(Statement s) {
