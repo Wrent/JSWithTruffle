@@ -2,11 +2,15 @@ package com.akucera.jsWithTruffle;
 
 import com.akucera.jsWithTruffle.exceptions.UnknownSyntaxException;
 import com.akucera.jsWithTruffle.javascript.JSNode;
+import com.akucera.jsWithTruffle.javascript.literals.LiteralBooleanNode;
+import com.akucera.jsWithTruffle.javascript.literals.LiteralNumberNode;
+import com.akucera.jsWithTruffle.javascript.literals.LiteralStringNode;
 import com.akucera.jsWithTruffle.javascript.nodes.*;
 import com.akucera.jsWithTruffle.javascript.nodes.NumberNodeGen;
 import com.akucera.jsWithTruffle.javascript.nodes.JSVarNodeGen;
 import com.akucera.jsWithTruffle.javascript.nodes.StringNodeGen;
 import com.akucera.jsWithTruffle.javascript.nodes.BooleanNodeGen;
+import com.akucera.jsWithTruffle.javascript.types.*;
 import com.oracle.truffle.api.frame.FrameDescriptor;
 import jdk.nashorn.internal.ir.Expression;
 import jdk.nashorn.internal.ir.IdentNode;
@@ -48,6 +52,7 @@ public class StatementsHandler {
                     throw new UnknownSyntaxException();
             }
         }
+        System.out.println(list);
         return list;
     }
 
@@ -59,7 +64,7 @@ public class StatementsHandler {
         return null;
     }
 
-    private static JSNode handleVarNode(Statement s) {
+    private static JSNode handleVarNode(Statement s) throws UnknownSyntaxException {
         VarNode var = (VarNode) s;
         IdentNode assignmentDest = var.getAssignmentDest();
         Expression assignmentSource = var.getAssignmentSource();
@@ -67,32 +72,53 @@ public class StatementsHandler {
         //podle toho jaky typ ma promenna vytvorime JSnodes
         switch (assignmentSource.getType().toString()) {
             case "int":
-                NumberNode numberNode = NumberNodeGen.create(frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                JSVarNode numberVar = JSVarNodeGen.create(numberNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
+                LiteralNumberNode literalNumberNode = new LiteralNumberNode(new JSNumber(new Number() {
+                    @Override
+                    public int intValue() {
+                        return Integer.parseInt(assignmentSource.toString());
+                    }
+
+                    @Override
+                    public long longValue() {
+                        return Integer.parseInt(assignmentSource.toString());
+                    }
+
+                    @Override
+                    public float floatValue() {
+                        return Integer.parseInt(assignmentSource.toString());
+                    }
+
+                    @Override
+                    public double doubleValue() {
+                        return Integer.parseInt(assignmentSource.toString());
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "" + this.intValue();
+                    }
+                }));
+                JSVarNode numberVar = JSVarNodeGen.create(literalNumberNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
                 return numberVar;
             case "boolean":
-                BooleanNode booleanNode = BooleanNodeGen.create(frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                JSVarNode booleanVar = JSVarNodeGen.create(booleanNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
+                LiteralBooleanNode literalBooleanNode = new LiteralBooleanNode(new JSBoolean(Boolean.parseBoolean(assignmentSource.toString())));
+                JSVarNode booleanVar = JSVarNodeGen.create(literalBooleanNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
                 return booleanVar;
             case "object<type=String>":
-                StringNode stringNode = StringNodeGen.create(frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                JSVarNode stringVar = JSVarNodeGen.create(stringNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
+                LiteralStringNode literalStringNode = new LiteralStringNode(new JSString(assignmentSource.toString()));
+                JSVarNode stringVar = JSVarNodeGen.create(literalStringNode, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
                 return stringVar;
             case "object":
-                System.out.println("got null");
-                break;
+                JSNull jsNull = new JSNull();
+                JSVarNode nullVar = JSVarNodeGen.create(jsNull, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
+                return nullVar;
             case "object<type=Undefined>":
-                System.out.println("got undefined");
-                break;
+                JSUndefined jsUndefined = new JSUndefined();
+                JSVarNode undefinedVar = JSVarNodeGen.create(jsUndefined, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
+                return undefinedVar;
             default:
-
-                break;
+                throw new UnknownSyntaxException();
         }
-
-        System.out.println(assignmentDest.getName());
-        System.out.println(assignmentSource.getType().getInternalName());
-
-        return null;
     }
 
     private static JSNode handleExpressionStatement(Statement s) {

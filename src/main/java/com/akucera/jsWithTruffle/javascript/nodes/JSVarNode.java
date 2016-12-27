@@ -29,4 +29,10 @@ public abstract class JSVarNode extends JSNode {
         virtualFrame.setObject(slot, value);
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "(var " + this.getSlot().getIdentifier() + " "
+                + this.getValueNode() + ")";
+    }
 }
