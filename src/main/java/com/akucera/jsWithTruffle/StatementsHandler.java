@@ -11,9 +11,8 @@ import com.akucera.jsWithTruffle.javascript.nodes.JSVarNodeGen;
 import com.akucera.jsWithTruffle.javascript.operations.OpCode;
 import com.akucera.jsWithTruffle.javascript.types.*;
 import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.api.frame.FrameSlot;
 import jdk.nashorn.internal.ir.*;
-import jdk.nashorn.internal.runtime.Source;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,17 @@ public class StatementsHandler {
         return null;
     }
 
-    private static JSNode handleExpressionStatement(Statement s) {
+    private static JSNode handleExpressionStatement(Statement s) throws UnknownSyntaxException {
+        Expression exp = ((ExpressionStatement) s).getExpression();
+        if (exp.isAssignment()) {
+            BinaryNode binaryExp = (BinaryNode) exp;
+            //expression vprvo
+            JSNode builtExpression = handleExpression(binaryExp.rhs());
+            return assignVarNode((IdentNode) binaryExp.lhs(), binaryExp.rhs(), builtExpression);
+        } else {
+            //todo console log, nic jineho asi ne
+        }
+
         return null;
     }
 
@@ -76,7 +85,12 @@ public class StatementsHandler {
 
         //musime sestavit expression vpravo
         JSNode builtExpression = handleExpression(assignmentSource);
+        return assignVarNode(assignmentDest, assignmentSource, builtExpression);
 
+
+    }
+
+    private static JSNode assignVarNode(IdentNode assignmentDest, Expression assignmentSource, JSNode builtExpression) throws UnknownSyntaxException {
         //podle toho jaky typ ma promenna vytvorime JSnodes
         switch (assignmentSource.getType().toString()) {
             case "int":
@@ -115,8 +129,17 @@ public class StatementsHandler {
                 LiteralBooleanNode literalBooleanNode = getLiteralBooleanNode(exp);
                 return literalBooleanNode;
             case "class jdk.nashorn.internal.ir.IdentNode":
-                JSUndefined jsUndefined = new JSUndefined();
-                return jsUndefined;
+                IdentNode identNode = (IdentNode) exp;
+                FrameSlot frameSlot = frameDescriptors.peek().findFrameSlot(identNode.getName());
+                if (frameSlot != null) {
+                    SymbolNode symbol = new SymbolNode(frameSlot);
+                    return symbol;
+                } else {
+                    //zadny frameSlot nenalezen = promenna neexistuje v danem scope
+                    JSUndefined jsUndefined = new JSUndefined();
+                    return jsUndefined;
+                }
+
             case "class jdk.nashorn.internal.ir.BinaryNode":
                 JSBinaryNode binaryNode = getBinaryNode(exp);
                 return binaryNode;
@@ -139,6 +162,7 @@ public class StatementsHandler {
             default:
                 System.out.println(node.tokenType());
                 throw new UnknownSyntaxException();
+                //todo other ops
         }
 
         JSBinaryNode binaryNode = new JSBinaryNode(lhs, rhs, token);
