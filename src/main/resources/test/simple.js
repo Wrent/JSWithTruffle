@@ -9,6 +9,7 @@ b = a + b;
 
 if (a > 2) {
     b = 7;
+    console.log("ahoj");
 }
 
 while(a > 10) {

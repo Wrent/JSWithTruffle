@@ -32,17 +32,17 @@ public class StatementsHandler {
         ArrayList<JSNode> list = new ArrayList<>();
 
         for (Statement s : statements) {
-            switch (s.getClass().toString()) {
-                case "class jdk.nashorn.internal.ir.VarNode":
+            switch (s.getClass().getName()) {
+                case "jdk.nashorn.internal.ir.VarNode":
                     list.add(handleVarNode(s));
                     break;
-                case "class jdk.nashorn.internal.ir.IfNode":
+                case "jdk.nashorn.internal.ir.IfNode":
                     list.add(handleIfNode(s));
                     break;
-                case "class jdk.nashorn.internal.ir.WhileNode":
+                case "jdk.nashorn.internal.ir.WhileNode":
                     list.add(handleWhileNode(s));
                     break;
-                case "class jdk.nashorn.internal.ir.ExpressionStatement":
+                case "jdk.nashorn.internal.ir.ExpressionStatement":
                     list.add(handleExpressionStatement(s));
                     break;
                 default:
@@ -60,21 +60,36 @@ public class StatementsHandler {
 
     private static JSNode handleExpressionStatement(Statement s) throws UnknownSyntaxException {
         Expression exp = ((ExpressionStatement) s).getExpression();
+        System.out.println(exp.getClass().getName());
         if (exp.isAssignment()) {
             BinaryNode binaryExp = (BinaryNode) exp;
             //expression vprvo
             JSNode builtExpression = handleExpression(binaryExp.rhs());
             return assignVarNode((IdentNode) binaryExp.lhs(), binaryExp.rhs(), builtExpression);
-        } else {
-            //todo console log, nic jineho asi ne
+        } else if (exp.getClass().getName().equals("jdk.nashorn.internal.ir.CallNode")){
+            System.out.println("aaaaa");
+            try {
+                CallNode callNode = (CallNode) exp;
+                AccessNode accessNode = (AccessNode) callNode.getFunction();
+                IdentNode base = (IdentNode) accessNode.getBase();
+                if (base.getName().equals("console") && accessNode.getProperty().equals("log")) {
+                    //todo bude pravdepodobne potrebovat jeste asi prevest z Expression na neco naseho, ale TODO...
+                    List<Expression> args = callNode.getArgs();
+                    return new ConsoleLogNode(args.get(0));
+                }
+            } catch (Exception e) {
+                System.out.println(exp.getClass());
+                throw new UnknownSyntaxException();
+            }
         }
+        System.out.println(s.getClass());
+        throw new UnknownSyntaxException();
 
-        return null;
     }
 
-    private static JSNode handleIfNode(Statement s) {
+    private static JSNode handleIfNode(Statement s) throws UnknownSyntaxException {
         IfNode ifNode = (IfNode) s;
-        ifNode.getTest();
+        JSNode testCondition = handleExpression(ifNode.getTest());
         return null;
     }
 
@@ -115,20 +130,20 @@ public class StatementsHandler {
     }
 
     private static JSNode handleExpression(Expression exp) throws UnknownSyntaxException {
-        switch (exp.getClass().toString()) {
-            case "class jdk.nashorn.internal.ir.LiteralNode$NumberLiteralNode":
+        switch (exp.getClass().getName()) {
+            case "jdk.nashorn.internal.ir.LiteralNode$NumberLiteralNode":
                 LiteralNumberNode literalNumberNode = getLiteralNumberNode(exp);
                 return literalNumberNode;
-            case "class jdk.nashorn.internal.ir.LiteralNode$StringLiteralNode":
+            case "jdk.nashorn.internal.ir.LiteralNode$StringLiteralNode":
                 LiteralStringNode literalStringNode = getLiteralStringNode(exp);
                 return literalStringNode;
-            case "class jdk.nashorn.internal.ir.LiteralNode$NullLiteralNode":
+            case "jdk.nashorn.internal.ir.LiteralNode$NullLiteralNode":
                 JSNull jsNull = new JSNull();
                 return jsNull;
-            case "class jdk.nashorn.internal.ir.LiteralNode$BooleanLiteralNode":
+            case "jdk.nashorn.internal.ir.LiteralNode$BooleanLiteralNode":
                 LiteralBooleanNode literalBooleanNode = getLiteralBooleanNode(exp);
                 return literalBooleanNode;
-            case "class jdk.nashorn.internal.ir.IdentNode":
+            case "jdk.nashorn.internal.ir.IdentNode":
                 IdentNode identNode = (IdentNode) exp;
                 FrameSlot frameSlot = frameDescriptors.peek().findFrameSlot(identNode.getName());
                 if (frameSlot != null) {
@@ -140,7 +155,7 @@ public class StatementsHandler {
                     return jsUndefined;
                 }
 
-            case "class jdk.nashorn.internal.ir.BinaryNode":
+            case "jdk.nashorn.internal.ir.BinaryNode":
                 JSBinaryNode binaryNode = getBinaryNode(exp);
                 return binaryNode;
             default:
