@@ -32,26 +32,30 @@ public class StatementsHandler {
         ArrayList<JSNode> list = new ArrayList<>();
 
         for (Statement s : statements) {
-            switch (s.getClass().getName()) {
-                case "jdk.nashorn.internal.ir.VarNode":
-                    list.add(handleVarNode(s));
-                    break;
-                case "jdk.nashorn.internal.ir.IfNode":
-                    list.add(handleIfNode(s));
-                    break;
-                case "jdk.nashorn.internal.ir.WhileNode":
-                    list.add(handleWhileNode(s));
-                    break;
-                case "jdk.nashorn.internal.ir.ExpressionStatement":
-                    list.add(handleExpressionStatement(s));
-                    break;
-                default:
-                    System.out.println(s.getClass());
-                    throw new UnknownSyntaxException();
-            }
+            handleStatement(list, s);
         }
         System.out.println(list);
         return list;
+    }
+
+    private static void handleStatement(List<JSNode> list, Statement s) throws UnknownSyntaxException {
+        switch (s.getClass().getName()) {
+            case "jdk.nashorn.internal.ir.VarNode":
+                list.add(handleVarNode(s));
+                break;
+            case "jdk.nashorn.internal.ir.IfNode":
+                list.add(handleIfNode(s));
+                break;
+            case "jdk.nashorn.internal.ir.WhileNode":
+                list.add(handleWhileNode(s));
+                break;
+            case "jdk.nashorn.internal.ir.ExpressionStatement":
+                list.add(handleExpressionStatement(s));
+                break;
+            default:
+                System.out.println(s.getClass());
+                throw new UnknownSyntaxException();
+        }
     }
 
     private static JSNode handleWhileNode(Statement s) {
@@ -67,7 +71,6 @@ public class StatementsHandler {
             JSNode builtExpression = handleExpression(binaryExp.rhs());
             return assignVarNode((IdentNode) binaryExp.lhs(), binaryExp.rhs(), builtExpression);
         } else if (exp.getClass().getName().equals("jdk.nashorn.internal.ir.CallNode")){
-            System.out.println("aaaaa");
             try {
                 CallNode callNode = (CallNode) exp;
                 AccessNode accessNode = (AccessNode) callNode.getFunction();
@@ -90,7 +93,17 @@ public class StatementsHandler {
     private static JSNode handleIfNode(Statement s) throws UnknownSyntaxException {
         IfNode ifNode = (IfNode) s;
         JSNode testCondition = handleExpression(ifNode.getTest());
-        return null;
+        List<JSNode> passStatements = new ArrayList<>();
+        List<JSNode> failStatements = new ArrayList<>();
+        for (Statement statement : ifNode.getPass().getStatements()) {
+            handleStatement(passStatements, statement);
+        }
+        for (Statement statement : ifNode.getPass().getStatements()) {
+            handleStatement(failStatements, statement);
+        }
+        BlockNode passBlock = new BlockNode(passStatements);
+        BlockNode failBlock = new BlockNode(failStatements);
+        return new JSIfNode(testCondition, passBlock, failBlock);
     }
 
     private static JSNode handleVarNode(Statement s) throws UnknownSyntaxException {
@@ -101,8 +114,6 @@ public class StatementsHandler {
         //musime sestavit expression vpravo
         JSNode builtExpression = handleExpression(assignmentSource);
         return assignVarNode(assignmentDest, assignmentSource, builtExpression);
-
-
     }
 
     private static JSNode assignVarNode(IdentNode assignmentDest, Expression assignmentSource, JSNode builtExpression) throws UnknownSyntaxException {
@@ -173,6 +184,9 @@ public class StatementsHandler {
         switch (node.tokenType().getName()) {
             case "+":
                 token = OpCode.PLUS;
+                break;
+            case ">":
+                token = OpCode.GT;
                 break;
             default:
                 System.out.println(node.tokenType());

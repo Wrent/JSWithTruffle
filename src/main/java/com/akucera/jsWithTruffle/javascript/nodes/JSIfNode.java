@@ -40,4 +40,9 @@ public class JSIfNode extends JSNode {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "(if " + testNode + thenNode +" else "+ elseNode + ")";
+    }
 }

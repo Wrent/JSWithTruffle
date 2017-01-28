@@ -2,6 +2,7 @@ package com.akucera.jsWithTruffle.javascript.nodes;
 
 import com.akucera.jsWithTruffle.javascript.JSNode;
 import com.akucera.jsWithTruffle.javascript.operations.OpCode;
+import com.akucera.jsWithTruffle.javascript.types.JSBoolean;
 import com.akucera.jsWithTruffle.javascript.types.JSNumber;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
@@ -22,14 +23,24 @@ public class JSBinaryNode extends JSNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
+        JSNumber left, right, number;
+        Number num;
+        boolean bool;
         switch (token) {
             case PLUS:
-                JSNumber left = (JSNumber) lhs.execute(virtualFrame);
-                JSNumber right = (JSNumber) rhs.execute(virtualFrame);
-                Number num = left.value.intValue() + right.value.intValue();
+                left = (JSNumber) lhs.execute(virtualFrame);
+                right = (JSNumber) rhs.execute(virtualFrame);
+                num = left.value.intValue() + right.value.intValue();
 
-                JSNumber number = new JSNumber(num);
+                number = new JSNumber(num);
                 return number;
+            case GT:
+                left = (JSNumber) lhs.execute(virtualFrame);
+                right = (JSNumber) rhs.execute(virtualFrame);
+                bool = left.value.intValue() > right.value.intValue();
+
+                JSBoolean jsBoolean = new JSBoolean(bool);
+                return jsBoolean;
         }
         //todo other ops
 
@@ -41,6 +52,8 @@ public class JSBinaryNode extends JSNode {
         switch (token) {
             case PLUS:
                 return "(" + lhs.toString() + "+" + rhs.toString() + ")";
+            case GT:
+                return "(" + lhs.toString() + ">" + rhs.toString() + ")";
         }
         //todo other ops
         return "";
