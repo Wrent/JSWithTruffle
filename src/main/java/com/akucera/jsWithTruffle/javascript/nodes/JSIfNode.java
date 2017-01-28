@@ -8,7 +8,7 @@ import com.oracle.truffle.api.profiles.ConditionProfile;
 /**
  * Created by akucera on 25.12.16.
  */
-public class IfNode extends JSNode {
+public class JSIfNode extends JSNode {
     @Child private JSNode testNode;
     @Child private JSNode thenNode;
     @Child private JSNode elseNode;
@@ -16,8 +16,8 @@ public class IfNode extends JSNode {
     private final ConditionProfile conditionProfile =
             ConditionProfile.createBinaryProfile();
 
-    public IfNode(JSNode testNode, JSNode thenNode,
-                  JSNode elseNode) {
+    public JSIfNode(JSNode testNode, JSNode thenNode,
+                    JSNode elseNode) {
         this.testNode = testNode;
         this.thenNode = thenNode;
         this.elseNode = elseNode;

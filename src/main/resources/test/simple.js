@@ -1,9 +1,11 @@
-var a = 5;
-var b = 6;
+var a = 4 + 2;
+var b = 7;
 var c = "aa";
 var d = null;
 var e = undefined;
 var f = true;
+
+b = a + b;
 
 if (a > 2) {
     b = 7;
