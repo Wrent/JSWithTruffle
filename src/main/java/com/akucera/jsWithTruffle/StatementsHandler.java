@@ -6,10 +6,14 @@ import com.akucera.jsWithTruffle.javascript.literals.LiteralBooleanNode;
 import com.akucera.jsWithTruffle.javascript.literals.LiteralNumberNode;
 import com.akucera.jsWithTruffle.javascript.literals.LiteralStringNode;
 import com.akucera.jsWithTruffle.javascript.nodes.*;
+import com.akucera.jsWithTruffle.javascript.nodes.JSBinaryNode;
 import com.akucera.jsWithTruffle.javascript.nodes.JSVarNodeGen;
+import com.akucera.jsWithTruffle.javascript.operations.OpCode;
 import com.akucera.jsWithTruffle.javascript.types.*;
 import com.oracle.truffle.api.frame.FrameDescriptor;
 import jdk.nashorn.internal.ir.*;
+import jdk.nashorn.internal.runtime.Source;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.OPCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,7 @@ import java.util.Stack;
  */
 public class StatementsHandler {
     public static final Stack<FrameDescriptor> frameDescriptors = new Stack<>();
+
     static {
         frameDescriptors.add(new FrameDescriptor());
     }
@@ -113,13 +118,31 @@ public class StatementsHandler {
                 JSUndefined jsUndefined = new JSUndefined();
                 return jsUndefined;
             case "class jdk.nashorn.internal.ir.BinaryNode":
-                break;
+                JSBinaryNode binaryNode = getBinaryNode(exp);
+                return binaryNode;
             default:
                 System.out.println(exp.getClass());
                 throw new UnknownSyntaxException();
         }
+    }
 
-        return null;
+    private static JSBinaryNode getBinaryNode(Expression exp) throws UnknownSyntaxException {
+        BinaryNode node = (BinaryNode) exp;
+        JSNode lhs = handleExpression(node.lhs());
+        JSNode rhs = handleExpression(node.rhs());
+        OpCode token;
+
+        switch (node.tokenType().getName()) {
+            case "+":
+                token = OpCode.PLUS;
+                break;
+            default:
+                System.out.println(node.tokenType());
+                throw new UnknownSyntaxException();
+        }
+
+        JSBinaryNode binaryNode = new JSBinaryNode(lhs, rhs, token);
+        return binaryNode;
     }
 
     private static LiteralStringNode getLiteralStringNode(Expression assignmentSource) {
