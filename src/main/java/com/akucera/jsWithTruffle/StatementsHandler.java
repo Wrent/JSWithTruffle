@@ -58,8 +58,15 @@ public class StatementsHandler {
         }
     }
 
-    private static JSNode handleWhileNode(Statement s) {
-        return null;
+    private static JSNode handleWhileNode(Statement s) throws UnknownSyntaxException {
+        WhileNode whileNode = (WhileNode) s;
+        JSNode testCondition = handleExpression(whileNode.getTest());
+        List<JSNode> loopStatements = new ArrayList<>();
+        for (Statement statement : whileNode.getBody().getStatements()) {
+            handleStatement(loopStatements, statement);
+        }
+        BlockNode loopBlock = new BlockNode(loopStatements);
+        return new JSWhileNode(testCondition, loopBlock);
     }
 
     private static JSNode handleExpressionStatement(Statement s) throws UnknownSyntaxException {
@@ -141,6 +148,7 @@ public class StatementsHandler {
     }
 
     private static JSNode handleExpression(Expression exp) throws UnknownSyntaxException {
+        System.out.println(exp);
         switch (exp.getClass().getName()) {
             case "jdk.nashorn.internal.ir.LiteralNode$NumberLiteralNode":
                 LiteralNumberNode literalNumberNode = getLiteralNumberNode(exp);
@@ -169,6 +177,9 @@ public class StatementsHandler {
             case "jdk.nashorn.internal.ir.BinaryNode":
                 JSBinaryNode binaryNode = getBinaryNode(exp);
                 return binaryNode;
+            case "jdk.nashorn.internal.ir.JoinPredecessorExpression":
+                JoinPredecessorExpression jpe = (JoinPredecessorExpression) exp;
+                return getBinaryNode(jpe.getExpression());
             default:
                 System.out.println(exp.getClass());
                 throw new UnknownSyntaxException();
