@@ -15,6 +15,7 @@ public class ConsoleLogNode extends BuiltinNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
+        System.out.println(this.getClass().getSimpleName().toString() + " executed");
         System.out.println(value);
         return value;
     }

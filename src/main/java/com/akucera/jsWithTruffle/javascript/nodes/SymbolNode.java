@@ -27,6 +27,7 @@ public class SymbolNode extends JSNode {
             }
             value = frame.getValue(this.slot);
         }
+        System.out.println(this.getClass().getSimpleName().toString() + " executed, returning "+value);
         return value;
     }
 

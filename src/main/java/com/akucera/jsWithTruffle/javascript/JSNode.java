@@ -42,4 +42,20 @@ public abstract class JSNode extends Node{
         return com.akucera.jsWithTruffle.javascript.JSTypesGen.JSTYPES.expectJSUndefined(
                 this.execute(virtualFrame));
     }
+
+    public JSFunction executeJSFunction(VirtualFrame virtualFrame)
+            throws UnexpectedResultException {
+        return com.akucera.jsWithTruffle.javascript.JSTypesGen.JSTYPES.expectJSFunction(
+                this.execute(virtualFrame));
+
+    }
+
+    protected boolean isArgumentIndexInRange(VirtualFrame virtualFrame,
+                                             int index) {
+        return (index + 1) < virtualFrame.getArguments().length;
+    }
+
+    protected Object getArgument(VirtualFrame virtualFrame, int index) {
+        return virtualFrame.getArguments()[index + 1];
+    }
 }

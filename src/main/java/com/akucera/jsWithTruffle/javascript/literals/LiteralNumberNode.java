@@ -20,7 +20,9 @@ public class LiteralNumberNode extends JSNode {
     }
 
     @Override
-    public Object execute(VirtualFrame virtualFrame) {
+    public Object execute(VirtualFrame virtualFrame)
+    {
+        System.out.println(this.getClass().getSimpleName().toString() + " executed, returning "+ this.number);
         return this.number;
     }
 

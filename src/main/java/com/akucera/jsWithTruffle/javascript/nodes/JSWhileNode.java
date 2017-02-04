@@ -22,6 +22,7 @@ public class JSWhileNode extends JSNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
+        System.out.println(this.getClass().getSimpleName().toString() + " executed, executing loop");
         while (this.conditionProfile.profile(this.testResult(virtualFrame))) {
             this.loopNode.execute(virtualFrame);
         }

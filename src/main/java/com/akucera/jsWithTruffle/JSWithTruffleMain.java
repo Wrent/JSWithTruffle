@@ -18,7 +18,7 @@ public class JSWithTruffleMain {
 
     public static void main(String[] args) throws IOException {
 
-        JSImpl[] impls = new JSImpl[]{new JS()};
+        JS[] impls = new JS[]{new JSImpl()};
         String arg = args[0];
         if (arg.equals("-benchmark")) {
             JSBenchmark.benchmark(impls);
@@ -31,7 +31,7 @@ public class JSWithTruffleMain {
         if (args.length > 1) {
             iterations = Integer.parseInt(args[1]);
         }
-        JSImpl js = impls[impl];
+        JS js = impls[impl];
 
         System.out.println("Running with " + js.getClass().getSimpleName() + " for " + iterations+ " iterations.");
 

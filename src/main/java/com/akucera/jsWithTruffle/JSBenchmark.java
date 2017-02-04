@@ -15,18 +15,18 @@ import java.util.List;
 
 public class JSBenchmark {
 
-    public static void benchmark(JSImpl[] impls) throws IOException {
+    public static void benchmark(JS[] impls) throws IOException {
         benchmark("simple.js", impls, "");
     }
 
-    private static final void benchmark(String name, JSImpl[] implementations, String input) throws IOException {
+    private static final void benchmark(String name, JS[] implementations, String input) throws IOException {
         List<Statement> operations = parse(name);
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes("ASCII"));
-        for (JSImpl impl : implementations) {
+        for (JS impl : implementations) {
             impl.prepare(operations, in, new ByteArrayOutputStream());
         }
         System.out.println("Benchmarking " + name);
-        for (JSImpl impl : implementations) {
+        for (JS impl : implementations) {
             System.err.printf("%10s : ", impl.getClass().getSimpleName());
             int iterations = warmup(impl, 4000, in);
             double score = run(impl, iterations, 2000, in);
@@ -34,7 +34,7 @@ public class JSBenchmark {
         }
     }
 
-    private static double run(JSImpl bf, int warmupIterations, long timeToRun, ByteArrayInputStream in) throws IOException {
+    private static double run(JS bf, int warmupIterations, long timeToRun, ByteArrayInputStream in) throws IOException {
         long startTime = System.currentTimeMillis();
         int iterations = warmupIterations;
         long timeElapsed = 0;
@@ -59,7 +59,7 @@ public class JSBenchmark {
         return score;
     }
 
-    private static int warmup(JSImpl bf, long timeToRun, ByteArrayInputStream in) throws IOException {
+    private static int warmup(JS bf, long timeToRun, ByteArrayInputStream in) throws IOException {
         long startTime = System.currentTimeMillis();
         int iterations = 1;
         while (true) {

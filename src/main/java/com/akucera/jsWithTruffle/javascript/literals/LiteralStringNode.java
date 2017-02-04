@@ -21,6 +21,7 @@ public class LiteralStringNode extends JSNode{
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
+        System.out.println(this.getClass().getSimpleName().toString() + " executed, returning "+ this.string);
         return this.string;
     }
 
