@@ -17,7 +17,7 @@ public class BlockNode extends JSNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        System.out.println(this.getClass().getSimpleName().toString() + " executed, executing statements returning "+ null);
+        //System.out.println(this.getClass().getSimpleName().toString() + " executed, executing statements returning "+ null);
         for (JSNode s : statements) {
             s.execute(virtualFrame);
         }

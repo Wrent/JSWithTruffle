@@ -16,5 +16,6 @@ while(a > 10) {
     b = a + b;
     b = b + 1;
 }
+b = b + 30;
 
 console.log(b);

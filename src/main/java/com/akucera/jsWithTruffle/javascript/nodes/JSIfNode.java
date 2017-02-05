@@ -26,10 +26,10 @@ public class JSIfNode extends JSNode {
     @Override
     public Object execute(VirtualFrame virtualFrame) {
         if (this.conditionProfile.profile(this.testResult(virtualFrame))) {
-            System.out.println(this.getClass().getSimpleName().toString() + " executed, returning then");
+            //System.out.println(this.getClass().getSimpleName().toString() + " executed, returning then");
             return this.thenNode.execute(virtualFrame);
         } else {
-            System.out.println(this.getClass().getSimpleName().toString() + " executed, returning else");
+            //System.out.println(this.getClass().getSimpleName().toString() + " executed, returning else");
             return this.elseNode.execute(virtualFrame);
         }
     }

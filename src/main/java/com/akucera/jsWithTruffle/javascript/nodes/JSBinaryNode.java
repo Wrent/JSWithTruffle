@@ -26,7 +26,7 @@ public class JSBinaryNode extends JSNode {
         JSNumber left, right, number;
         Number num;
         boolean bool;
-        System.out.println(this.getClass().getSimpleName().toString() + " executed");
+        //System.out.println(this.getClass().getSimpleName().toString() + " executed");
         switch (token) {
             case PLUS:
                 left = (JSNumber) lhs.execute(virtualFrame);
@@ -34,7 +34,7 @@ public class JSBinaryNode extends JSNode {
                 num = left.value.intValue() + right.value.intValue();
 
                 number = new JSNumber(num);
-                System.out.println("returning "+number);
+                //System.out.println("returning "+number);
                 return number;
             case GT:
                 left = (JSNumber) lhs.execute(virtualFrame);
@@ -42,7 +42,7 @@ public class JSBinaryNode extends JSNode {
                 bool = left.value.intValue() > right.value.intValue();
 
                 JSBoolean jsBoolean = new JSBoolean(bool);
-                System.out.println("returning "+jsBoolean);
+                //System.out.println("returning "+jsBoolean);
 
                 return jsBoolean;
         }

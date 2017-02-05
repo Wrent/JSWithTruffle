@@ -22,7 +22,7 @@ public class LiteralBooleanNode extends JSNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        System.out.println(this.getClass().getSimpleName().toString() + " executed, returning "+ this.bool);
+        //System.out.println(this.getClass().getSimpleName().toString() + " executed, returning "+ this.bool);
         return this.bool;
     }
 

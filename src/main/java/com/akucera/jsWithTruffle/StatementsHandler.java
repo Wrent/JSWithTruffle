@@ -71,21 +71,29 @@ public class StatementsHandler {
 
     private static JSNode handleExpressionStatement(Statement s) throws UnknownSyntaxException {
         Expression exp = ((ExpressionStatement) s).getExpression();
-        System.out.println(exp.getClass().getName());
         if (exp.isAssignment()) {
             BinaryNode binaryExp = (BinaryNode) exp;
             //expression vprvo
             JSNode builtExpression = handleExpression(binaryExp.rhs());
-            return assignVarNode((IdentNode) binaryExp.lhs(), binaryExp.rhs(), builtExpression);
+            if (binaryExp.lhs().getClass().getName().equals("jdk.nashorn.internal.ir.IdentNode")) {
+                //normal assignement
+                System.out.println("assigning var");
+                return assignVarNode((IdentNode) binaryExp.lhs(), binaryExp.rhs(), builtExpression);
+            } else {
+                //array assignement
+                System.out.println("array" + binaryExp.lhs());
+                //todo
+                return null;
+            }
         } else if (exp.getClass().getName().equals("jdk.nashorn.internal.ir.CallNode")){
             try {
                 CallNode callNode = (CallNode) exp;
                 AccessNode accessNode = (AccessNode) callNode.getFunction();
                 IdentNode base = (IdentNode) accessNode.getBase();
                 if (base.getName().equals("console") && accessNode.getProperty().equals("log")) {
-                    //todo bude pravdepodobne potrebovat jeste asi prevest z Expression na neco naseho, ale TODO...
                     List<Expression> args = callNode.getArgs();
-                    return new ConsoleLogNode(args.get(0));
+                    JSNode loggedNode = handleExpression(args.get(0));
+                    return new ConsoleLogNode(loggedNode);
                 }
             } catch (Exception e) {
                 System.out.println(exp.getClass());
@@ -120,35 +128,17 @@ public class StatementsHandler {
 
         //musime sestavit expression vpravo
         JSNode builtExpression = handleExpression(assignmentSource);
-        return assignVarNode(assignmentDest, assignmentSource, builtExpression);
+        System.out.println("builtExp " + builtExpression);
+        JSNode varNode = assignVarNode(assignmentDest, assignmentSource, builtExpression);
+        System.out.println("aa " +varNode);
+        return varNode;
     }
 
     private static JSNode assignVarNode(IdentNode assignmentDest, Expression assignmentSource, JSNode builtExpression) throws UnknownSyntaxException {
-        //podle toho jaky typ ma promenna vytvorime JSnodes
-        switch (assignmentSource.getType().toString()) {
-            case "int":
-            case "double":
-                JSVarNode numberVar = JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                return numberVar;
-            case "boolean":
-                JSVarNode booleanVar = JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                return booleanVar;
-            case "object<type=String>":
-                JSVarNode stringVar = JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                return stringVar;
-            case "object":
-                JSVarNode nullVar = JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                return nullVar;
-            case "object<type=Undefined>":
-                JSVarNode undefinedVar = JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
-                return undefinedVar;
-            default:
-                throw new UnknownSyntaxException(assignmentSource.getType().toString());
-        }
+        return JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
     }
 
     private static JSNode handleExpression(Expression exp) throws UnknownSyntaxException {
-        System.out.println(exp);
         switch (exp.getClass().getName()) {
             case "jdk.nashorn.internal.ir.LiteralNode$NumberLiteralNode":
                 LiteralNumberNode literalNumberNode = getLiteralNumberNode(exp);
@@ -180,8 +170,16 @@ public class StatementsHandler {
             case "jdk.nashorn.internal.ir.JoinPredecessorExpression":
                 JoinPredecessorExpression jpe = (JoinPredecessorExpression) exp;
                 return getBinaryNode(jpe.getExpression());
+            case "jdk.nashorn.internal.ir.LiteralNode$ArrayLiteralNode":
+                //create new empty array
+                return new NewArrayNode();
+            case "jdk.nashorn.internal.ir.IndexNode":
+                IndexNode indexNode = (IndexNode) exp;
+                System.out.println("array" + indexNode);
+                //todo
+                return null;
             default:
-                System.out.println(exp.getClass());
+                System.out.println(exp.getClass().getName());
                 throw new UnknownSyntaxException();
         }
     }
