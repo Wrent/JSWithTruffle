@@ -28,4 +28,4 @@ Insert your javascript file in  `/src/main/resources/test/`, build the app and r
 Basic unit tests can be found in TODO.
 
 ## Sources
-Implementation was based on [Brainfuck Truffle interpreter](https://github.com/japod/bf) and the insights from [Writing a Language in Truffle. Part 2: Using Truffle and Graal tutorial](http://cesquivias.github.io/blog/2014/12/02/writing-a-language-in-truffle-part-2-using-truffle-and-graal/) were used.
+Implementation was based on [Brainfuck Truffle interpreter](https://github.com/japod/bf) and the insights from [Writing a Language in Truffle. Part 2: Using Truffle and Graal tutorial](http://cesquivias.github.io/blog/2014/12/02/writing-a-language-in-truffle-part-2-using-truffle-and-graal/) were used. Application uses Mozzila Nashorn as a JavaScript parser.
