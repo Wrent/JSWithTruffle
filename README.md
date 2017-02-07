@@ -14,7 +14,7 @@ Application implements subset of [Ecmascript](http://www.ecma-international.org/
 Aplication requires GRAAL VM.
 
  1. Build the app using `mvn package`
- 2. Run the app ´./js FILENAME_TODO.js´
+ 2. Run the app  `./js FILENAME_TODO.js`
  3. Examine the output in the console
 
 This application is TODO 
@@ -22,7 +22,7 @@ This application is TODO
 The application should output TODO
  
 ### How to run your own code
-Insert your javascript file in ´/src/main/resources/test/´, build the app and run it with the correct filename.
+Insert your javascript file in  `/src/main/resources/test/`, build the app and run it with the correct filename.
 
 ## Unit tests
 Basic unit tests can be found in TODO.
