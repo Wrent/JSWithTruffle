@@ -209,10 +209,30 @@ public class StatementsHandler {
             case ">":
                 token = OpCode.GT;
                 break;
+            case "-":
+                token = OpCode.MINUS;
+                break;
+            case "*":
+                token = OpCode.TIMES;
+                break;
+            case "/":
+                token = OpCode.DIV;
+                break;
+            case "<":
+                token = OpCode.LT;
+                break;
+            case "||":
+                token = OpCode.OR;
+                break;
+            case "&&":
+                token = OpCode.AND;
+                break;
+            case "==":
+                token = OpCode.EQ;
+                break;
             default:
                 System.out.println(node.tokenType());
                 throw new UnknownSyntaxException();
-                //todo other ops
         }
 
         JSBinaryNode binaryNode = new JSBinaryNode(lhs, rhs, token);

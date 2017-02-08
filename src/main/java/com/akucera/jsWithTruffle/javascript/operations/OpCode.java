@@ -12,4 +12,5 @@ public enum OpCode {
     OR,
     EQ,
     GT,
+    LT
 }

@@ -1,11 +1,9 @@
 package com.akucera.jsWithTruffle.javascript.nodes;
 
-import com.akucera.jsWithTruffle.exceptions.UnknownSyntaxException;
 import com.akucera.jsWithTruffle.javascript.JSNode;
 import com.akucera.jsWithTruffle.javascript.types.JSArray;
 import com.akucera.jsWithTruffle.javascript.types.JSNumber;
 import com.oracle.truffle.api.frame.VirtualFrame;
-import jdk.nashorn.internal.ir.Expression;
 
 /**
  * Created by akucera on 7.2.17.
