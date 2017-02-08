@@ -5,6 +5,14 @@ var d = null;
 var e = undefined;
 var f = true;
 
+var c = [];
+
+c[0] = 25;
+
+c[0] = c[0] + 10;
+
+console.log(c[0]);
+
 b = a + b;
 
 if (a > 2) {

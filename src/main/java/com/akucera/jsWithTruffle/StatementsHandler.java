@@ -77,13 +77,13 @@ public class StatementsHandler {
             JSNode builtExpression = handleExpression(binaryExp.rhs());
             if (binaryExp.lhs().getClass().getName().equals("jdk.nashorn.internal.ir.IdentNode")) {
                 //normal assignement
-                System.out.println("assigning var");
                 return assignVarNode((IdentNode) binaryExp.lhs(), binaryExp.rhs(), builtExpression);
             } else {
                 //array assignement
-                System.out.println("array" + binaryExp.lhs());
-                //todo
-                return null;
+                IndexNode indexNode = (IndexNode) binaryExp.lhs();
+                Expression indexExpression = indexNode.getIndex();
+                IdentNode identNode = (IdentNode) indexNode.getBase();
+                return assignToArray(identNode, indexExpression, builtExpression);
             }
         } else if (exp.getClass().getName().equals("jdk.nashorn.internal.ir.CallNode")){
             try {
@@ -128,14 +128,26 @@ public class StatementsHandler {
 
         //musime sestavit expression vpravo
         JSNode builtExpression = handleExpression(assignmentSource);
-        System.out.println("builtExp " + builtExpression);
         JSNode varNode = assignVarNode(assignmentDest, assignmentSource, builtExpression);
-        System.out.println("aa " +varNode);
         return varNode;
     }
 
     private static JSNode assignVarNode(IdentNode assignmentDest, Expression assignmentSource, JSNode builtExpression) throws UnknownSyntaxException {
         return JSVarNodeGen.create(builtExpression, frameDescriptors.peek().findOrAddFrameSlot(assignmentDest.getName()));
+    }
+
+    private static JSNode assignToArray(IdentNode arrayName, Expression index, JSNode builtExpression) throws UnknownSyntaxException {
+        Expression exp = arrayName;
+        JSNode symbol = handleExpression(exp);
+        JSNode indexNode = handleExpression(index);
+        return new AssignToArrayNode(symbol, indexNode, builtExpression);
+    }
+
+    private static JSNode readFromArray(IdentNode arrayName, Expression index) throws UnknownSyntaxException {
+        Expression exp = arrayName;
+        JSNode symbol = handleExpression(exp);
+        JSNode indexNode = handleExpression(index);
+        return new ReadFromArrayNode(symbol, indexNode);
     }
 
     private static JSNode handleExpression(Expression exp) throws UnknownSyntaxException {
@@ -175,9 +187,9 @@ public class StatementsHandler {
                 return new NewArrayNode();
             case "jdk.nashorn.internal.ir.IndexNode":
                 IndexNode indexNode = (IndexNode) exp;
-                System.out.println("array" + indexNode);
-                //todo
-                return null;
+                Expression indexExpression = indexNode.getIndex();
+                IdentNode indexBase = (IdentNode) indexNode.getBase();
+                return readFromArray(indexBase, indexExpression);
             default:
                 System.out.println(exp.getClass().getName());
                 throw new UnknownSyntaxException();

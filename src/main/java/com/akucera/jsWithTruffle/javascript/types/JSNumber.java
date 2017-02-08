@@ -15,4 +15,7 @@ public class JSNumber {
         return "'" + this.value.toString();
     }
 
+    public int getInt() {
+        return this.value.intValue();
+    }
 }
