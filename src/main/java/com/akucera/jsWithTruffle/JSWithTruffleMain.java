@@ -45,6 +45,12 @@ public class JSWithTruffleMain {
     }
 
     public static List<Statement> parseToStatements(String file) throws IOException {
+        ClassLoader classLoader = JSWithTruffleMain.class.getClassLoader();
+        File f = new File(classLoader.getResource("test/" + file).getFile());
+        return parseToStatements(f);
+    }
+
+    public static List<Statement> parseToStatements(File f) throws IOException {
         Options options = new Options("nashorn");
         options.set("anon.functions", true);
         options.set("parse.only", true);
@@ -54,9 +60,7 @@ public class JSWithTruffleMain {
         Context context = new Context(options, errors, Thread.currentThread().getContextClassLoader());
 
         ClassLoader classLoader = JSWithTruffleMain.class.getClassLoader();
-        System.out.println(file);
-        File f = new File(classLoader.getResource("test/" + file).getFile());
-        Source source = Source.sourceFor(file, f);
+        Source source = Source.sourceFor(f.getName(), f);
         Parser parser = new Parser(context.getEnv(), source, errors);
         FunctionNode functionNode = parser.parse();
         Block block = functionNode.getBody();

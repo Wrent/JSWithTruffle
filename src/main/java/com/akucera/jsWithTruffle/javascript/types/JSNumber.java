@@ -12,7 +12,7 @@ public class JSNumber {
 
     @Override
     public String toString() {
-        return "'" + this.value.toString();
+        return this.value.toString();
     }
 
     public int getInt() {

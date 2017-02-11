@@ -14,6 +14,9 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.FrameSlot;
 import jdk.nashorn.internal.ir.*;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -23,18 +26,24 @@ import java.util.Stack;
  */
 public class StatementsHandler {
     public static final Stack<FrameDescriptor> frameDescriptors = new Stack<>();
+    public static PrintStream out;
+    public static InputStream in;
+
 
     static {
         frameDescriptors.add(new FrameDescriptor());
     }
 
-    public static List<JSNode> handle(List<Statement> statements) throws UnknownSyntaxException {
+    public static List<JSNode> handle(List<Statement> statements, InputStream in, PrintStream out) throws UnknownSyntaxException {
         ArrayList<JSNode> list = new ArrayList<>();
+
+        StatementsHandler.out = out;
+        StatementsHandler.in = in;
 
         for (Statement s : statements) {
             handleStatement(list, s);
         }
-        System.out.println(list);
+        //System.out.println(list);
         return list;
     }
 
@@ -93,7 +102,7 @@ public class StatementsHandler {
                 if (base.getName().equals("console") && accessNode.getProperty().equals("log")) {
                     List<Expression> args = callNode.getArgs();
                     JSNode loggedNode = handleExpression(args.get(0));
-                    return new ConsoleLogNode(loggedNode);
+                    return new ConsoleLogNode(loggedNode, out);
                 }
             } catch (Exception e) {
                 System.out.println(exp.getClass());

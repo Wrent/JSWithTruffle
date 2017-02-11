@@ -23,7 +23,7 @@ public class JSBenchmark {
         List<Statement> operations = parse(name);
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes("ASCII"));
         for (JS impl : implementations) {
-            impl.prepare(operations, in, new ByteArrayOutputStream());
+            impl.prepare(operations, in, System.out);
         }
         System.out.println("Benchmarking " + name);
         for (JS impl : implementations) {

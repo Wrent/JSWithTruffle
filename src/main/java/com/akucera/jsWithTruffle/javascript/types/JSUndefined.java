@@ -25,6 +25,6 @@ public class JSUndefined extends JSNode {
 
     @Override
     public String toString() {
-        return "'undefined";
+        return "undefined";
     }
 }

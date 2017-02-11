@@ -13,6 +13,7 @@ import jdk.nashorn.internal.ir.Statement;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.StreamSupport;
@@ -25,9 +26,9 @@ public class JSImpl extends JS {
     private Stack<FrameDescriptor> frameDescriptors;
 
     @Override
-    public void prepare(List<Statement> statements, InputStream in, OutputStream out) {
+    public void prepare(List<Statement> statements, InputStream in, PrintStream out) {
         try {
-            this.statements = StatementsHandler.handle(statements);
+            this.statements = StatementsHandler.handle(statements, in, out);
             this.frameDescriptors = StatementsHandler.frameDescriptors;
         } catch (UnknownSyntaxException e) {
             e.printStackTrace();
@@ -37,7 +38,6 @@ public class JSImpl extends JS {
     @Override
     public void run() throws IOException {
         VirtualFrame topFrame = createTopFrame(frameDescriptors.peek());
-        System.out.println("starting execution");
         execute(statements, topFrame);
     }
 
