@@ -122,7 +122,7 @@ public class StatementsHandler {
         for (Statement statement : ifNode.getPass().getStatements()) {
             handleStatement(passStatements, statement);
         }
-        for (Statement statement : ifNode.getPass().getStatements()) {
+        for (Statement statement : ifNode.getFail().getStatements()) {
             handleStatement(failStatements, statement);
         }
         BlockNode passBlock = new BlockNode(passStatements);

@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * Created by akucera on 8.2.17.
  */
-public class OperationTest {
+public class JavascriptTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
@@ -90,6 +90,55 @@ public class OperationTest {
         assertEquals("true\ntrue\nfalse", outContent.toString().trim());
     }
 
+    @org.junit.Test
+    public void testIntVar() throws Exception {
+        initTest("var a = 10;\nconsole.log(a + 2);");
+        assertEquals("12", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testStringVar() throws Exception {
+        initTest("var a = \"hello world\";\nconsole.log(a);");
+        assertEquals("\"hello world\"", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testBooleanVar() throws Exception {
+        initTest("var a = false;\nconsole.log(a);");
+        assertEquals("false", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testIfBranch() throws Exception {
+        initTest("if (2 > 1) {console.log(\"if branch\");} else {console.log(\"else branch\");}");
+        assertEquals("\"if branch\"", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testElseBranch() throws Exception {
+        initTest("if (2 < 1) {console.log(\"if branch\");} else {console.log(\"else branch\");}");
+        assertEquals("\"else branch\"", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testLoop() throws Exception {
+        initTest("var a = 0; while (a < 5) {console.log(a);a = a + 1;}");
+        assertEquals("0\n1\n2\n3\n4", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testFailLoop() throws Exception {
+        initTest("var a = 6; while (a < 5) {console.log(a);a = a + 1;}");
+        assertEquals("", outContent.toString().trim());
+    }
+
+
+    @org.junit.Test
+    public void testArray() throws Exception {
+        initTest("var a = 0; var array = []; while (a < 5) {array[a] = a; a = a + 1;} a = 0;" +
+                "while (a < 5) {console.log(array[a]);a = a + 1;}");
+        assertEquals("0\n1\n2\n3\n4", outContent.toString().trim());
+    }
 
     private void initTest(String content) throws IOException {
         File file = new File(Math.random()*100000 + ".js");

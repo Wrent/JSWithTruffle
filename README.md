@@ -3,7 +3,7 @@ JavaScript runtime implementation (partial) in Java using Truffle.
 
 ## Language description
 Application implements subset of [Ecmascript](http://www.ecma-international.org/publications/standards/Ecma-262.htm), specifically:
- - variables
+ - variables - integer, string and boolean types
  - if branches
  - while loops
  - arrays accessible via [] operation
@@ -25,7 +25,7 @@ The application should output TODO
 Insert your javascript file in  `/src/main/resources/test/`, build the app and run it with the correct filename.
 
 ## Unit tests
-Basic unit tests can be found in TODO.
+Basic unit tests can be found in test folder in file JavascriptTest.java. These test check if all of the implemented Javascript features work (operations, variables of different type, if branches, while loops and arrays).
 
 ## Sources
 Implementation was based on [Brainfuck Truffle interpreter](https://github.com/japod/bf) and the insights from [Writing a Language in Truffle. Part 2: Using Truffle and Graal tutorial](http://cesquivias.github.io/blog/2014/12/02/writing-a-language-in-truffle-part-2-using-truffle-and-graal/) were used. Application uses Mozzila Nashorn as a JavaScript parser.
