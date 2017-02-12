@@ -1,6 +1,7 @@
 package com.akucera.jsWithTruffle.javascript.nodes;
 
 import com.akucera.jsWithTruffle.javascript.JSNode;
+import com.akucera.jsWithTruffle.javascript.types.JSUndefined;
 import com.oracle.truffle.api.frame.Frame;
 import com.oracle.truffle.api.frame.FrameSlot;
 import com.oracle.truffle.api.frame.VirtualFrame;
@@ -22,8 +23,7 @@ public class SymbolNode extends JSNode {
         while (value == null) {
             frame = this.getLexicalScope(frame);
             if (frame == null) {
-                throw new RuntimeException("Unknown variable: " +
-                        this.slot.getIdentifier());
+                return new JSUndefined();
             }
             value = frame.getValue(this.slot);
         }
@@ -32,7 +32,11 @@ public class SymbolNode extends JSNode {
     }
 
     private Frame getLexicalScope(Frame frame) {
-        return (Frame) frame.getArguments()[0];
+        if (frame.getArguments().length > 0) {
+            return (Frame) frame.getArguments()[0];
+        } else {
+            return null;
+        }
     }
 
     @Override
