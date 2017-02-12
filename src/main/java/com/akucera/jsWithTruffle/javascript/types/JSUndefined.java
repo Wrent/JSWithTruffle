@@ -15,12 +15,12 @@ public class JSUndefined extends JSNode {
 
     @Override
     public JSUndefined executeUndefinedNode(VirtualFrame virtualFrame) {
-        return null;
+        return this;
     }
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        return null;
+        return this;
     }
 
     @Override

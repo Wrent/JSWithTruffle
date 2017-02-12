@@ -14,12 +14,12 @@ public class JSNull extends JSNode {
 
     @Override
     public JSNull executeNullNode(VirtualFrame virtualFrame) {
-        return null;
+        return this;
     }
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        return null;
+        return this;
     }
 
     @Override

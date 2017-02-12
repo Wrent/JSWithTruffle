@@ -140,6 +140,24 @@ public class JavascriptTest {
         assertEquals("0\n1\n2\n3\n4", outContent.toString().trim());
     }
 
+    @org.junit.Test
+    public void testNull() throws Exception {
+        initTest("var a = null; console.log(a);");
+        assertEquals("null", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testUndefined() throws Exception {
+        initTest("var a = undefined; console.log(a);");
+        assertEquals("undefined", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testNotDefined() throws Exception {
+        initTest("console.log(a);");
+        assertEquals("undefined", outContent.toString().trim());
+    }
+
     private void initTest(String content) throws IOException {
         File file = new File(Math.random()*100000 + ".js");
         String testJSString = content;
