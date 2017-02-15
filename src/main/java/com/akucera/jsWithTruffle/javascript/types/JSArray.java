@@ -18,7 +18,11 @@ public class JSArray<T extends Object>  {
     }
 
     public void add(int i, T e) {
-        this.list.add(i, e);
+        try {
+            this.list.set(i, e);
+        } catch (IndexOutOfBoundsException exp) {
+            this.list.add(i, e);
+        }
     }
 
     public T get(int i) {

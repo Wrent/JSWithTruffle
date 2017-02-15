@@ -122,8 +122,10 @@ public class StatementsHandler {
         for (Statement statement : ifNode.getPass().getStatements()) {
             handleStatement(passStatements, statement);
         }
-        for (Statement statement : ifNode.getFail().getStatements()) {
-            handleStatement(failStatements, statement);
+        if (ifNode.getFail() != null) {
+            for (Statement statement : ifNode.getFail().getStatements()) {
+                handleStatement(failStatements, statement);
+            }
         }
         BlockNode passBlock = new BlockNode(passStatements);
         BlockNode failBlock = new BlockNode(failStatements);
@@ -190,7 +192,11 @@ public class StatementsHandler {
                 return binaryNode;
             case "jdk.nashorn.internal.ir.JoinPredecessorExpression":
                 JoinPredecessorExpression jpe = (JoinPredecessorExpression) exp;
-                return getBinaryNode(jpe.getExpression());
+                if (jpe.getExpression().getClass().getName().equals("jdk.nashorn.internal.ir.IdentNode")) {
+                    return handleExpression(jpe.getExpression());
+                } else {
+                    return getBinaryNode(jpe.getExpression());
+                }
             case "jdk.nashorn.internal.ir.LiteralNode$ArrayLiteralNode":
                 //create new empty array
                 return new NewArrayNode();
@@ -206,6 +212,7 @@ public class StatementsHandler {
     }
 
     private static JSBinaryNode getBinaryNode(Expression exp) throws UnknownSyntaxException {
+        //System.out.println(exp);
         BinaryNode node = (BinaryNode) exp;
         JSNode lhs = handleExpression(node.lhs());
         JSNode rhs = handleExpression(node.rhs());

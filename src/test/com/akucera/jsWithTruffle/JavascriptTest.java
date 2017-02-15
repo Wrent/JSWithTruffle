@@ -158,6 +158,51 @@ public class JavascriptTest {
         assertEquals("undefined", outContent.toString().trim());
     }
 
+    @org.junit.Test
+    public void testFibonaci() throws Exception {
+        JS impl = new JSImpl();
+        List<Statement> statements = JSWithTruffleMain.parseToStatements("fibonaci.js");
+        impl.prepare(statements, System.in, System.out);
+        impl.run();
+        assertEquals("1\n" +
+                "2\n" +
+                "3\n" +
+                "5\n" +
+                "8\n" +
+                "13\n" +
+                "21\n" +
+                "34\n" +
+                "55\n" +
+                "89\n" +
+                "144\n" +
+                "233\n" +
+                "377\n" +
+                "610\n" +
+                "987\n" +
+                "1597\n" +
+                "2584\n" +
+                "4181\n" +
+                "6765\n" +
+                "10946\n" +
+                "17711\n" +
+                "28657\n" +
+                "46368\n" +
+                "75025\n" +
+                "121393\n" +
+                "196418\n" +
+                "317811\n" +
+                "514229", outContent.toString().trim());
+    }
+
+    @org.junit.Test
+    public void testBubbleSort() throws Exception {
+        JS impl = new JSImpl();
+        List<Statement> statements = JSWithTruffleMain.parseToStatements("bubbleSort.js");
+        impl.prepare(statements, System.in, System.out);
+        impl.run();
+        assertEquals("JSArray{list=[3, 9, 34, 198, 200, 203, 746, 764, 984]}", outContent.toString().trim());
+    }
+
     private void initTest(String content) throws IOException {
         File file = new File(Math.random()*100000 + ".js");
         String testJSString = content;
