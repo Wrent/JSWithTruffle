@@ -7,7 +7,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import java.io.PrintStream;
 
 /**
- * Created by akucera on 25.12.16.
+ * Node representing output to console.
  */
 public class ConsoleLogNode extends BuiltinNode {
     private final JSNode value;
@@ -20,7 +20,7 @@ public class ConsoleLogNode extends BuiltinNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        //System.out.println(this.getClass().getSimpleName().toString() + " executed");
+        //writes to output stream
         out.println(value.execute(virtualFrame));
         return value;
     }

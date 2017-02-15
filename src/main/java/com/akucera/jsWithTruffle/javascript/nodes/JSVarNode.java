@@ -11,7 +11,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.Node;
 
 /**
- * Created by akucera on 25.12.16.
+ * Node representing creation of a variable.
  */
 @NodeChild("valueNode")
 @NodeField(name = "slot", type = FrameSlot.class)
@@ -19,6 +19,12 @@ public abstract class JSVarNode extends JSNode {
     protected abstract FrameSlot getSlot();
     protected abstract Node getValueNode();
 
+    /**
+     * Writes variable to the virtualFrame
+     * @param virtualFrame
+     * @param value
+     * @return
+     */
     @Specialization
     protected Object write(VirtualFrame virtualFrame, Object value) {
         FrameSlot slot = this.getSlot();

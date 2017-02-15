@@ -5,7 +5,7 @@ import com.akucera.jsWithTruffle.javascript.types.JSArray;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 5.2.17.
+ * Node, which creates new Array.
  */
 public class NewArrayNode extends JSNode {
 

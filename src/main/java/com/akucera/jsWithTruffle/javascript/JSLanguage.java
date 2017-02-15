@@ -7,7 +7,7 @@ import com.oracle.truffle.api.nodes.Node;
 import com.oracle.truffle.api.source.Source;
 
 /**
- * Created by akucera on 4.2.17.
+ * Javascript language specification for Truffle.
  */
 @TruffleLanguage.Registration(name = "Javascript", version = "0.1",
         mimeType = JSLanguage.MIME_TYPE)

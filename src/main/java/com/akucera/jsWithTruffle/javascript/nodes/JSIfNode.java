@@ -6,7 +6,7 @@ import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import com.oracle.truffle.api.profiles.ConditionProfile;
 
 /**
- * Created by akucera on 25.12.16.
+ * Node representing an If statement
  */
 public class JSIfNode extends JSNode {
     @Child private JSNode testNode;
@@ -26,14 +26,19 @@ public class JSIfNode extends JSNode {
     @Override
     public Object execute(VirtualFrame virtualFrame) {
         if (this.conditionProfile.profile(this.testResult(virtualFrame))) {
-            //System.out.println(this.getClass().getSimpleName().toString() + " executed, returning then");
+            //execute if branch
             return this.thenNode.execute(virtualFrame);
         } else {
-            //System.out.println(this.getClass().getSimpleName().toString() + " executed, returning else");
+            //execute else branch
             return this.elseNode.execute(virtualFrame);
         }
     }
 
+    /**
+     * Test condition
+     * @param virtualFrame
+     * @return
+     */
     private boolean testResult(VirtualFrame virtualFrame) {
         try {
             return this.testNode.executeBooleanNode(virtualFrame).getValue();

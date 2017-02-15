@@ -5,7 +5,7 @@ import com.akucera.jsWithTruffle.javascript.types.JSString;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 25.12.16.
+ * Representation of simple boolean node.
  */
 public class LiteralStringNode extends JSNode{
     public final JSString string;

@@ -6,7 +6,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import java.util.List;
 
 /**
- * Created by akucera on 28.1.17.
+ * Node representing block of statements (aka other nodes, used e.g. as body of a loop).
  */
 public class BlockNode extends JSNode {
     public final List<JSNode> statements;
@@ -17,7 +17,7 @@ public class BlockNode extends JSNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        //System.out.println(this.getClass().getSimpleName().toString() + " executed, executing statements returning "+ null);
+        //executes all statements
         for (JSNode s : statements) {
             s.execute(virtualFrame);
         }

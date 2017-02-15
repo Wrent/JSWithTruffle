@@ -6,7 +6,7 @@ import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import com.oracle.truffle.api.profiles.ConditionProfile;
 
 /**
- * Created by akucera on 29.1.17.
+ * Node representing while loop
  */
 public class JSWhileNode extends JSNode {
     @Child private JSNode testNode;
@@ -22,14 +22,18 @@ public class JSWhileNode extends JSNode {
 
     @Override
     public Object execute(VirtualFrame virtualFrame) {
-        //System.out.println(this.getClass().getSimpleName().toString() + " executed, executing loop");
+        //execute the whole loop
         while (this.conditionProfile.profile(this.testResult(virtualFrame))) {
             this.loopNode.execute(virtualFrame);
         }
-
         return null;
     }
 
+    /**
+     * Test the condition.
+     * @param virtualFrame
+     * @return
+     */
     private boolean testResult(VirtualFrame virtualFrame) {
         try {
             return this.testNode.executeBooleanNode(virtualFrame).getValue();

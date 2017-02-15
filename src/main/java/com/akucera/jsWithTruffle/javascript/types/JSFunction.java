@@ -9,10 +9,9 @@ import com.oracle.truffle.api.frame.FrameSlot;
 import com.oracle.truffle.api.frame.MaterializedFrame;
 
 /**
- * Created by akucera on 30.1.17.
+ * Function type, but it is used only as the main function.
  */
 public class JSFunction {
-    //used purely as main function and nothing else? could implement functions as well though...
     public final RootCallTarget callTarget;
     private MaterializedFrame lexicalScope;
 

@@ -4,7 +4,7 @@ import com.akucera.jsWithTruffle.javascript.types.*;
 import com.oracle.truffle.api.dsl.TypeSystem;
 
 /**
- * Created by akucera on 25.12.16.
+ * This file specifies types in our implementation.
  */
 @TypeSystem({JSBoolean.class, JSNumber.class, JSString.class, JSNull.class, JSUndefined.class, JSFunction.class, JSArray.class})
 public class JSTypes {

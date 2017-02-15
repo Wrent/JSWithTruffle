@@ -6,7 +6,7 @@ import com.akucera.jsWithTruffle.javascript.types.JSNumber;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 7.2.17.
+ * Node, which assigns to array to given index.
  */
 public class AssignToArrayNode extends JSNode {
     private JSNode symbol;
@@ -23,6 +23,7 @@ public class AssignToArrayNode extends JSNode {
     public Object execute(VirtualFrame virtualFrame) {
         JSArray<Object> jsArray = (JSArray<Object>) symbol.execute(virtualFrame);
         int i = ((JSNumber) index.execute(virtualFrame)).getInt();
+        //adds to the array on index
         jsArray.add(i, rhs.execute(virtualFrame));
         return jsArray.get(i);
     }

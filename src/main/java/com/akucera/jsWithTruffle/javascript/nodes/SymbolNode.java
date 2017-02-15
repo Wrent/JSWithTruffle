@@ -7,7 +7,7 @@ import com.oracle.truffle.api.frame.FrameSlot;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 28.1.17.
+ * Node which represents a symbol (pointer to a variable) which has to be executed.
  */
 public class SymbolNode extends JSNode {
     public final FrameSlot slot;

@@ -9,7 +9,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 /**
- * Created by akucera on 28.1.17.
+ * Node representing a binary node.
  */
 public class JSBinaryNode extends JSNode {
 
@@ -29,83 +29,83 @@ public class JSBinaryNode extends JSNode {
         JSBoolean jsBoolean, leftBoolean, rightBoolean;;
         Number num;
         boolean bool;
-        //System.out.println(this.getClass().getSimpleName().toString() + " executed");
+        //the execution depends on operation
         switch (token) {
             case PLUS:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //plus
                 num = left.value.intValue() + right.value.intValue();
 
                 number = new JSNumber(num);
-                //System.out.println("returning "+number);
                 return number;
             case GT:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //greater than
                 bool = left.value.intValue() > right.value.intValue();
 
                 jsBoolean = new JSBoolean(bool);
-                //System.out.println("returning "+jsBoolean);
 
                 return jsBoolean;
             case MINUS:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //minus
                 num = left.value.intValue() - right.value.intValue();
 
                 number = new JSNumber(num);
-                //System.out.println("returning "+number);
                 return number;
             case TIMES:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //times
                 num = left.value.intValue() * right.value.intValue();
 
                 number = new JSNumber(num);
-                //System.out.println("returning "+number);
                 return number;
             case DIV:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //div
                 num = left.value.intValue() / right.value.intValue();
 
                 number = new JSNumber(num);
-                //System.out.println("returning "+number);
                 return number;
             case LT:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //lesser than
                 bool = left.value.intValue() < right.value.intValue();
 
                 jsBoolean = new JSBoolean(bool);
-                //System.out.println("returning "+jsBoolean);
 
                 return jsBoolean;
             case EQ:
                 left = (JSNumber) lhs.execute(virtualFrame);
                 right = (JSNumber) rhs.execute(virtualFrame);
+                //equals
                 bool = left.value.intValue() == right.value.intValue();
 
                 jsBoolean = new JSBoolean(bool);
-                //System.out.println("returning "+jsBoolean);
 
                 return jsBoolean;
             case AND:
                 leftBoolean = (JSBoolean) lhs.execute(virtualFrame);
                 rightBoolean = (JSBoolean) rhs.execute(virtualFrame);
+                //and
                 bool = leftBoolean.getValue() && rightBoolean.getValue();
 
                 jsBoolean = new JSBoolean(bool);
-                //System.out.println("returning "+jsBoolean);
 
                 return jsBoolean;
             case OR:
                 leftBoolean = (JSBoolean) lhs.execute(virtualFrame);
                 rightBoolean = (JSBoolean) rhs.execute(virtualFrame);
+                //or
                 bool = leftBoolean.getValue() || rightBoolean.getValue();
 
                 jsBoolean = new JSBoolean(bool);
-                //System.out.println("returning "+jsBoolean);
 
                 return jsBoolean;
         }

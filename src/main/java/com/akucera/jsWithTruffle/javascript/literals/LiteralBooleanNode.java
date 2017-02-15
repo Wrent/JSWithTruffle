@@ -5,7 +5,7 @@ import com.akucera.jsWithTruffle.javascript.JSNode;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 25.12.16.
+ * Representation of simple boolean.
  */
 public class LiteralBooleanNode extends JSNode {
     public final JSBoolean bool;

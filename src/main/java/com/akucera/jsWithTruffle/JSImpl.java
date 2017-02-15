@@ -19,12 +19,18 @@ import java.util.Stack;
 import java.util.stream.StreamSupport;
 
 /**
- * Created by akucera on 25.12.16.
+ * Our Javascript implementation main class.
  */
 public class JSImpl extends JS {
     private List<JSNode> statements;
     private Stack<FrameDescriptor> frameDescriptors;
 
+    /**
+     * Creates JS statements to be executed later.
+     * @param statements
+     * @param in
+     * @param out
+     */
     @Override
     public void prepare(List<Statement> statements, InputStream in, PrintStream out) {
         try {
@@ -35,21 +41,36 @@ public class JSImpl extends JS {
         }
     }
 
+    /**
+     * Executes statements.
+     * @throws IOException
+     */
     @Override
     public void run() throws IOException {
         VirtualFrame topFrame = createTopFrame(frameDescriptors.peek());
         execute(statements, topFrame);
     }
 
+    /**
+     * Creates top frame just for running the main body of JS.
+     * @param frameDescriptor
+     * @return
+     */
     private VirtualFrame createTopFrame(FrameDescriptor frameDescriptor) {
         VirtualFrame virtualFrame = Truffle.getRuntime().createVirtualFrame(
                 new Object[] {}, frameDescriptor);
         return virtualFrame;
     }
 
-
+    /**
+     * Executes the JSNodes with given topFrame.
+     * @param nodes
+     * @param topFrame
+     * @return
+     */
     private Object execute(List<JSNode> nodes, VirtualFrame topFrame) {
         FrameDescriptor frameDescriptor = topFrame.getFrameDescriptor();
+        //makes the body of JS the main function
         JSFunction function = JSFunction.create(new FrameSlot[] {},
                 StreamSupport.stream(nodes.spliterator(), false)
                         .toArray(size -> new JSNode[size]),

@@ -12,7 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-
+/**
+ * Benchmark class, the same as for BF interpreter.
+ */
 public class JSBenchmark {
 
     public static void benchmark(JS[] impls) throws IOException {

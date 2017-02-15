@@ -1,7 +1,7 @@
 package com.akucera.jsWithTruffle.exceptions;
 
 /**
- * Created by akucera on 26.12.16.
+ * Exception to be thrown if there is something in the Javascript code we cannot handle.
  */
 public class UnknownSyntaxException extends Throwable{
 

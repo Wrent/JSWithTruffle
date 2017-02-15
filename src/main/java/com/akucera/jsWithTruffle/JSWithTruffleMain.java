@@ -52,7 +52,7 @@ public class JSWithTruffleMain {
     }
 
     /**
-     * Parsing statementes from a file.
+     * Parsing statements from a file specified by its name in resources folder.
      * @param file
      * @return
      * @throws IOException
@@ -63,6 +63,12 @@ public class JSWithTruffleMain {
         return parseToStatements(f);
     }
 
+    /**
+     * Parsing statements from a specific file of File type (for testing).
+     * @param f
+     * @return
+     * @throws IOException
+     */
     public static List<Statement> parseToStatements(File f) throws IOException {
         Options options = new Options("nashorn");
         options.set("anon.functions", true);

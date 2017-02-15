@@ -5,7 +5,7 @@ import com.akucera.jsWithTruffle.javascript.types.JSNumber;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 25.12.16.
+ * Representation of simple integer node.
  */
 public class LiteralNumberNode extends JSNode {
     public final JSNumber number;

@@ -6,7 +6,7 @@ import com.akucera.jsWithTruffle.javascript.types.JSNumber;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 7.2.17.
+ * Node which performs reading from an array.
  */
 public class ReadFromArrayNode extends JSNode {
     private JSNode symbol;

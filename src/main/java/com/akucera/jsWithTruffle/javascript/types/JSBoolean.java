@@ -1,7 +1,7 @@
 package com.akucera.jsWithTruffle.javascript.types;
 
 /**
- * Created by akucera on 25.12.16.
+ * Boolean type.
  */
 public class JSBoolean {
     public final boolean value;

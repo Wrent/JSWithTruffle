@@ -7,13 +7,19 @@ import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
 
 /**
- * Created by akucera on 25.12.16.
+ * Basic abstract class representing a node in our language.
  */
 @NodeInfo(language = "Javascript Language", description = "The abstract base node for all expressions")
 public abstract class JSNode extends Node{
 
+    /**
+     * Basic execute function.
+     * @param virtualFrame
+     * @return
+     */
     public abstract Object execute(VirtualFrame virtualFrame);
 
+    //helper functions for truffle follow
     public JSNumber executeNumberNode(VirtualFrame virtualFrame) throws UnexpectedResultException {
         return com.akucera.jsWithTruffle.javascript.JSTypesGen.JSTYPES.expectJSNumber(
                 this.execute(virtualFrame));

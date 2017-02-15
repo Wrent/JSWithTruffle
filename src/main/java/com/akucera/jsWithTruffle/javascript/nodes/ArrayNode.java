@@ -6,7 +6,7 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 
 
 /**
- * Created by akucera on 5.2.17.
+ * Node, which creates new Array.
  */
 public class ArrayNode extends JSNode {
     public final JSArray<Object> array;

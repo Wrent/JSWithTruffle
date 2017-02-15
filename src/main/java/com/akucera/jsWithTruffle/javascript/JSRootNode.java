@@ -11,6 +11,9 @@ import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.ExplodeLoop;
 import com.oracle.truffle.api.nodes.RootNode;
 
+/**
+ * Root node just for main body function.
+ */
 public class JSRootNode extends RootNode {
     @Children
     private final JSNode[] bodyNodes;

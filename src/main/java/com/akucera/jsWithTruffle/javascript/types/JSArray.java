@@ -4,7 +4,7 @@ package com.akucera.jsWithTruffle.javascript.types;
 import java.util.ArrayList;
 
 /**
- * Created by akucera on 25.12.16.
+ * Array type.
  */
 public class JSArray<T extends Object>  {
     private ArrayList<T> list;
@@ -17,6 +17,11 @@ public class JSArray<T extends Object>  {
         return this.list.add(e);
     }
 
+    /**
+     * We have to be careful, if there is already something on index i.
+     * @param i
+     * @param e
+     */
     public void add(int i, T e) {
         try {
             this.list.set(i, e);

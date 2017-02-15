@@ -4,7 +4,7 @@ import com.akucera.jsWithTruffle.javascript.JSNode;
 import com.oracle.truffle.api.frame.VirtualFrame;
 
 /**
- * Created by akucera on 4.2.17.
+ * We do not support functions, so this is here just for running the Main body.
  */
 public class ReadArgumentNode extends JSNode {
     public final int argumentIndex;

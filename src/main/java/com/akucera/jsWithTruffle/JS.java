@@ -13,6 +13,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+/**
+ * Abstract class for any JS implementation.
+ */
 public abstract class JS {
 
     public abstract void prepare(List<Statement> statements, InputStream in, PrintStream out);
