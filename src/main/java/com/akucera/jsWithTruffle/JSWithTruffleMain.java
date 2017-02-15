@@ -13,9 +13,16 @@ import jdk.nashorn.internal.runtime.ErrorManager;
 import jdk.nashorn.internal.runtime.Source;
 import jdk.nashorn.internal.runtime.options.Options;
 
+/**
+ * Main class which handles running of the application
+ */
 public class JSWithTruffleMain {
 
-
+    /**
+     * Handling runing params, running the proper file.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
         JS[] impls = new JS[]{new JSImpl()};
@@ -44,6 +51,12 @@ public class JSWithTruffleMain {
         System.out.println("Elapsed " + ( System.currentTimeMillis() - time) + "ms");
     }
 
+    /**
+     * Parsing statementes from a file.
+     * @param file
+     * @return
+     * @throws IOException
+     */
     public static List<Statement> parseToStatements(String file) throws IOException {
         ClassLoader classLoader = JSWithTruffleMain.class.getClassLoader();
         File f = new File(classLoader.getResource("test/" + file).getFile());
