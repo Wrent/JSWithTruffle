@@ -61,5 +61,12 @@ Insert your javascript file in  `/src/main/resources/test/`, build the app and r
 ## Unit tests
 Basic unit tests can be found in test folder in file `JavascriptTest.java`. These test check if all of the implemented Javascript features work (operations, variables of different type, if branches, while loops and arrays). It also runs both testing examples.
 
+## Possible future work
+Another features which could be (relatively) easily implemented:
+ - Lexical context for blocks of code (just using already implemented frameDescriptors stack)
+ - another operations (>= etc.)
+ - functions (as there is already JSFunction type implemented)
+ - better array inicialization with multiple values
+
 ## Sources
 Implementation was based on [Brainfuck Truffle interpreter](https://github.com/japod/bf) and the insights from [Writing a Language in Truffle. Part 2: Using Truffle and Graal tutorial](http://cesquivias.github.io/blog/2014/12/02/writing-a-language-in-truffle-part-2-using-truffle-and-graal/) were used. Application uses Mozzila Nashorn as a JavaScript parser.
